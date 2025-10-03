@@ -1,38 +1,28 @@
 {
   "name": "react-pokemon-ts",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "private": true,
   "homepage": ".",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
+    "postbuild": "cp build/index.html build/404.html",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
   "dependencies": {
-    "axios": "^1.7.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-router-dom": "^6.26.2",
-    "react-scripts": "5.0.1"
+    "react-scripts": "5.0.1",
+    "axios": "^1.7.2",
+    "react-router-dom": "^6.23.0"
   },
   "devDependencies": {
-    "@types/node": "^20.11.25",
-    "@types/react": "^18.2.57",
-    "@types/react-dom": "^18.2.19",
-    "typescript": "4.9.5"
+    "typescript": "4.9.5",
+    "@types/react": "^18.2.0",
+    "@types/react-dom": "^18.2.0"
   },
   "overrides": {
-    "ajv": "6.12.6",
-    "ajv-keywords": "3.5.2",
-    "schema-utils": "3.1.1",
-    "terser-webpack-plugin": "5.3.10",
-    "fork-ts-checker-webpack-plugin": {
-      "schema-utils": "2.7.1"
-    }
-  },
-  "browserslist": {
-    "production": [">0.2%", "not dead", "not op_mini all"],
-    "development": ["last 1 chrome version", "last 1 firefox version", "last 1 safari version"]
+    "schema-utils": "^3.3.0"
   }
 }
