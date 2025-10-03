@@ -28,7 +28,8 @@ jobs:
           node-version: 20
 
       - name: Install dependencies
-        run: npm install
+        # 关键：允许旧式 peer 解析，避开 TS@5 与 CRA 的冲突
+        run: npm install --legacy-peer-deps --no-audit --no-fund
 
       - name: Build site
         run: npm run build
@@ -36,7 +37,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: ./dist
+          path: ./build
 
   deploy:
     needs: build
@@ -51,4 +52,3 @@ jobs:
 
       - id: deployment
         uses: actions/deploy-pages@v4
-
