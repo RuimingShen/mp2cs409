@@ -25,10 +25,9 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 18
 
       - name: Install dependencies
-        # 关键：允许旧式 peer 解析，避开 TS@5 与 CRA 的冲突
         run: npm install --legacy-peer-deps --no-audit --no-fund
 
       - name: Build site
@@ -45,10 +44,8 @@ jobs:
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
-
     steps:
       - name: Configure Pages
         uses: actions/configure-pages@v5
-
       - id: deployment
         uses: actions/deploy-pages@v4
