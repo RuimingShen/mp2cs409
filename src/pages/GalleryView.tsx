@@ -1,84 +1,66 @@
-import React, { useMemo, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import type { PokemonDetail } from "@/api/pokemon";
-import Card from "@/components/Card";
-import Chip from "@/components/Chip";
+import { useEffect, useMemo, useState } from 'react';
+import { PokeApi } from '../services/pokeApi';
+import PokemonCard from '../components/PokemonCard';
+import TypeFilters from '../components/TypeFilters';
+import type { Pokemon } from '../types/pokemon';
+import { useSelection } from '../context/SelectionContext';
 
-function imgFor(p: PokemonDetail): string | undefined {
-  return (
-    p.sprites?.other?.["official-artwork"]?.front_default ??
-    p.sprites?.front_default ??
-    undefined
-  );
-}
 
-export interface GalleryViewProps {
-  data: PokemonDetail[];
-  allTypes: string[];
-}
+export default function GalleryView() {
+const [all, setAll] = useState<Pokemon[]>([]);
+const [types, setTypes] = useState<string[]>([]);
+const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
+const [error, setError] = useState<string | null>(null);
+const [loading, setLoading] = useState(true);
+const { setOrder } = useSelection();
 
-export default function GalleryView({ data, allTypes }: GalleryViewProps) {
-  const [selected, setSelected] = useState<string[]>([]);
-  const navigate = useNavigate();
 
-  const toggle = (t: string) =>
-    setSelected((prev) =>
-      prev.includes(t) ? prev.filter((x) => x !== t) : [...prev, t]
-    );
+useEffect(() => {
+let alive = true;
+(async () => {
+try {
+setLoading(true); setError(null);
+const list = await PokeApi.getPokemonList(200, 0);
+const details = await PokeApi.getManyPokemonByNamesOrUrls(list.results);
+if (!alive) return;
+setAll(details);
+const tset = new Set(details.flatMap(p => p.types.map(t => t.type.name)));
+setTypes(Array.from(tset).sort());
+} catch (e: any) {
+setError(e?.message ?? 'Failed to load');
+} finally { setLoading(false); }
+})();
+return () => { alive = false; };
+}, []);
 
-  const filtered = useMemo(() => {
-    if (selected.length === 0) return data;
-    return data.filter((p) =>
-      selected.every((t) => p.types.some((tp) => tp.type.name === t))
-    );
-  }, [data, selected]);
 
-  return (
-    <div className="space-y-4">
-      <div>
-        <div className="mb-2 text-sm font-medium">Filter by type</div>
-        <div className="flex flex-wrap gap-2">
-          {allTypes.map((t) => (
-            <Chip
-              key={t}
-              label={t}
-              selected={selected.includes(t)}
-              onClick={() => toggle(t)}
-            />
-          ))}
-        </div>
-        {selected.length > 0 && (
-          <div className="mt-2 text-sm text-gray-600">
-            {filtered.length} match(es) for: {selected.join(", ")}
-          </div>
-        )}
-      </div>
+const filtered = useMemo(() => {
+if (!selectedTypes.length) return all;
+return all.filter(p => {
+const pt = p.types.map(t => t.type.name);
+return selectedTypes.every(t => pt.includes(t));
+});
+}, [all, selectedTypes]);
 
-      <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
-        {filtered.map((p) => (
-          <button
-            key={p.id}
-            className="group"
-            onClick={() => navigate(`/pokemon/${p.name}`)}
-          >
-            <Card>
-              <img
-                src={imgFor(p)}
-                alt={p.name}
-                className="mx-auto h-28 w-28 object-contain drop-shadow"
-              />
-              <div className="mt-2 text-center">
-                <div className="text-xs text-gray-500">
-                  #{p.id.toString().padStart(3, "0")}
-                </div>
-                <div className="font-semibold capitalize group-hover:underline">
-                  {p.name}
-                </div>
-              </div>
-            </Card>
-          </button>
-        ))}
-      </div>
-    </div>
-  );
+
+useEffect(() => { setOrder(filtered.map(p => p.name)); }, [filtered]);
+
+
+return (
+<section>
+<h1>Gallery View</h1>
+<div className="toolbar">
+<TypeFilters allTypes={types} selected={selectedTypes} onChange={setSelectedTypes} />
+</div>
+
+
+{loading && <div className="card">Loading…</div>}
+{error && <div className="card">Error: {error}</div>}
+
+
+<div className="grid" style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))' }}>
+{filtered.map(p => <PokemonCard key={p.id} p={p} />)}
+</div>
+</section>
+);
 }
