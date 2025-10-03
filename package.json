@@ -23,6 +23,6 @@
     "@types/react-dom": "^18.2.0"
   },
   "overrides": {
-    "schema-utils": "3.3.0"
+    "schema-utils": "2.7.1"
   }
 }
