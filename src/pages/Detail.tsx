@@ -36,19 +36,13 @@ export default function DetailPage() {
 
   return (
     <div className="page">
-      <div style={{ display: "flex", gap: 24, flexWrap: "wrap" }}>
-        <img src={art} alt={data.name} style={{ width: 280, height: 280, objectFit: "contain" }} />
+      <div className="detail-wrap">
+        <img src={art} alt={data.name} className="art" />
         <div>
-          <h1 style={{ textTransform: "capitalize" }}>{data.name} <small>#{data.id}</small></h1>
-          <p>
-            <strong>Types:</strong> {data.types.map((t) => t.type.name).join(", ")}
-          </p>
-          <p>
-            <strong>Abilities:</strong> {data.abilities.map((a) => a.ability.name).join(", ")}
-          </p>
-          <p>
-            <strong>Height:</strong> {data.height} | <strong>Weight:</strong> {data.weight}
-          </p>
+          <h1 className="cap">{data.name} <small>#{data.id}</small></h1>
+          <p><strong>Types:</strong> {data.types.map((t) => t.type.name).join(", ")}</p>
+          <p><strong>Abilities:</strong> {data.abilities.map((a) => a.ability.name).join(", ")}</p>
+          <p><strong>Height:</strong> {data.height} | <strong>Weight:</strong> {data.weight}</p>
           <div>
             <strong>Stats:</strong>
             <ul>
@@ -60,7 +54,7 @@ export default function DetailPage() {
             </ul>
           </div>
 
-          <div style={{ display: "flex", gap: 12, marginTop: 12 }}>
+          <div className="mt-12">
             <button onClick={() => go(-1)} aria-label="Previous" className="nav-btn">◀ Prev</button>
             <button onClick={() => go(1)} aria-label="Next" className="nav-btn">Next ▶</button>
           </div>

@@ -7,7 +7,7 @@ import "./index.css";
 
 export default function App() {
   return (
-    <BrowserRouter>
+    <BrowserRouter basename="/mp2cs409">
       <div className="shell">
         <nav className="topnav">
           <NavLink to="/" end>Search</NavLink>

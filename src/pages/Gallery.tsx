@@ -25,12 +25,10 @@ export default function GalleryPage() {
         setError(null);
 
         if (selected.length === 0) {
-          // default: show a nice grid of the first 60
           setItems(await getPokemonList(60, 0));
           return;
         }
 
-        // Fetch each type list, merge unique (OR filter)
         const byType = await Promise.all(selected.map((t) => getPokemonByType(t, 80)));
         const merged = new Map<number, PokemonListItem>();
         byType.flat().forEach((p) => merged.set(p.id, p));
@@ -59,10 +57,10 @@ export default function GalleryPage() {
       <div className="grid">
         {items.map((p) => (
           <Link key={p.id} to={`/pokemon/${p.id}`} className="card" aria-label={`View ${p.name}`}>
-            <img src={p.image} alt={p.name} loading="lazy" />
+            <img src={p.image} alt={p.name} />
             <div className="meta">
               <strong>#{p.id}</strong>
-              <span style={{ textTransform: "capitalize" }}>{p.name}</span>
+              <span className="cap">{p.name}</span>
             </div>
           </Link>
         ))}

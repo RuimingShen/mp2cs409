@@ -16,8 +16,45 @@ main { padding: 20px; }
 .card img { width: 100%; height: 140px; object-fit: contain; background: #0f1430; border-radius: 8px; }
 .card .meta { display:flex; justify-content: space-between; align-items: center; color: var(--muted); }
 
-.search-input { background: #0f1430; color: var(--ink); }
+.search-input {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  outline: none;
+  font-size: 16px;
+  background: #0f1430;
+  color: var(--ink);
+}
+
 .nav-btn { padding: 8px 12px; border-radius: 8px; background: #1a2240; color: var(--ink); border: 1px solid #27305a; cursor: pointer; }
 .nav-btn:hover { filter: brightness(1.15); }
 
 .footer { padding: 16px; color: var(--muted); border-top: 1px solid #2a3152; text-align:center; }
+
+.stack-12 { display: grid; gap: 12px; }
+.cap { text-transform: capitalize; }
+.mt-12 { margin-top: 12px; }
+.mt-12 .nav-btn + .nav-btn { margin-left: 12px; }
+
+.sort-controls { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+.select-inline select { margin-left: 8px; }
+
+.type-filter {}
+.type-chips { display: flex; gap: 8px; flex-wrap: wrap; }
+.type-chip {
+  padding: 6px 10px;
+  border-radius: 999px;
+  border: 1px solid #ddd;
+  background: #fff;
+  cursor: pointer;
+  text-transform: capitalize;
+}
+.type-chip[aria-pressed="true"] {
+  border: 2px solid #4f46e5;
+  background: #eef2ff;
+}
+.type-clear { margin-top: 8px; padding: 4px 8px; }
+
+.detail-wrap { display: flex; gap: 24px; flex-wrap: wrap; }
+.art { width: 280px; height: 280px; object-fit: contain; }

@@ -1,20 +1,17 @@
 import axios, { AxiosInstance } from "axios";
 import type { PokemonDetail, PokemonListItem } from "../types";
 
-// ---- Basic Axios client
 const api: AxiosInstance = axios.create({
   baseURL: "https://pokeapi.co/api/v2",
   timeout: 15000,
 });
 
-// ---- Super‑light in‑memory cache for GETs
 const cache = new Map<string, any>();
 
 api.interceptors.request.use((config) => {
   if (config.method === "get") {
     const key = config.baseURL + config.url;
     if (key && cache.has(key)) {
-      // Return cached response via adapter short‑circuit
       return {
         ...config,
         adapter: async () => ({
@@ -39,7 +36,6 @@ api.interceptors.response.use((resp) => {
   return resp;
 });
 
-// ---- Helpers
 export const officialArtwork = (id: number) =>
   `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${id}.png`;
 
@@ -48,7 +44,6 @@ const idFromUrl = (url: string) => {
   return m ? Number(m[1]) : NaN;
 };
 
-// ---- API: list
 export async function getPokemonList(limit = 200, offset = 0): Promise<PokemonListItem[]> {
   try {
     const { data } = await api.get(`/pokemon?limit=${limit}&offset=${offset}`);
@@ -57,7 +52,6 @@ export async function getPokemonList(limit = 200, offset = 0): Promise<PokemonLi
       return { name: r.name, id, image: officialArtwork(id) } as PokemonListItem;
     });
   } catch (err) {
-    // Mock fallback (first 12)
     const mock: PokemonListItem[] = [
       { id: 1, name: "bulbasaur", image: officialArtwork(1) },
       { id: 2, name: "ivysaur", image: officialArtwork(2) },
@@ -76,13 +70,11 @@ export async function getPokemonList(limit = 200, offset = 0): Promise<PokemonLi
   }
 }
 
-// ---- API: detail
 export async function getPokemonDetail(idOrName: string | number): Promise<PokemonDetail> {
   try {
     const { data } = await api.get(`/pokemon/${idOrName}`);
     return data as PokemonDetail;
   } catch (err) {
-    // Minimal mock for Pikachu
     return {
       id: 25,
       name: "pikachu",
@@ -106,11 +98,9 @@ export async function getPokemonDetail(idOrName: string | number): Promise<Pokem
   }
 }
 
-// ---- API: types
 export async function getAllTypes(): Promise<string[]> {
   try {
     const { data } = await api.get("/type");
-    // filter only actual types (1..20) and map names
     return data.results
       .map((t: { name: string; url: string }) => t.name)
       .filter((n: string) => !["unknown", "shadow"].includes(n));
@@ -130,7 +120,6 @@ export async function getPokemonByType(type: string, cap = 80): Promise<PokemonL
       });
     return list;
   } catch (err) {
-    // mock empty on failure
     return [];
   }
 }

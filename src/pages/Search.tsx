@@ -48,7 +48,7 @@ export default function SearchPage() {
     <div className="page">
       <h1>Pokémon Search</h1>
       <p>Filter as you type. Click a card for details.</p>
-      <div style={{ display: "grid", gap: 12 }}>
+      <div className="stack-12">
         <SearchBar value={query} onChange={setQuery} placeholder="Name or exact ID" />
         <SortControls sortKey={sortKey} order={order} onSortKey={setSortKey} onOrder={setOrder} />
       </div>
@@ -59,10 +59,10 @@ export default function SearchPage() {
       <div className="grid">
         {filtered.map((p) => (
           <Link key={p.id} to={`/pokemon/${p.id}`} className="card" aria-label={`View ${p.name}`}>
-            <img src={p.image} alt={p.name} loading="lazy" />
+            <img src={p.image} alt={p.name} />
             <div className="meta">
               <strong>#{p.id}</strong>
-              <span style={{ textTransform: "capitalize" }}>{p.name}</span>
+              <span className="cap">{p.name}</span>
             </div>
           </Link>
         ))}

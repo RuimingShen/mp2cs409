@@ -14,14 +14,6 @@ export default function SearchBar({ value, onChange, placeholder }: Props) {
       placeholder={placeholder || "Search..."}
       aria-label="Search"
       className="search-input"
-      style={{
-        width: "100%",
-        padding: "10px 12px",
-        borderRadius: 8,
-        border: "1px solid #ddd",
-        outline: "none",
-        fontSize: 16,
-      }}
     />
   );
 }

@@ -9,28 +9,21 @@ interface Props {
 
 export default function TypeFilter({ allTypes, selected, onToggle, onClear }: Props) {
   return (
-    <div>
-      <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+    <div className="type-filter">
+      <div className="type-chips">
         {allTypes.map((t) => (
           <button
             key={t}
             onClick={() => onToggle(t)}
             aria-pressed={selected.includes(t)}
-            style={{
-              padding: "6px 10px",
-              borderRadius: 999,
-              border: selected.includes(t) ? "2px solid #4f46e5" : "1px solid #ddd",
-              background: selected.includes(t) ? "#eef2ff" : "#fff",
-              cursor: "pointer",
-              textTransform: "capitalize",
-            }}
+            className="type-chip"
           >
             {t}
           </button>
         ))}
       </div>
       {selected.length > 0 && (
-        <button onClick={onClear} style={{ marginTop: 8, padding: "4px 8px" }}>
+        <button onClick={onClear} className="type-clear">
           Clear filters
         </button>
       )}

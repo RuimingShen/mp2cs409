@@ -12,25 +12,23 @@ interface Props {
 
 export default function SortControls({ sortKey, order, onSortKey, onOrder }: Props) {
   return (
-    <div style={{ display: "flex", gap: 12, alignItems: "center", flexWrap: "wrap" }}>
-      <label>
+    <div className="sort-controls">
+      <label className="select-inline">
         Sort by:
         <select
           value={sortKey}
           onChange={(e) => onSortKey(e.target.value as SortKey)}
-          style={{ marginLeft: 8 }}
         >
           <option value="name">Name</option>
           <option value="id">ID</option>
         </select>
       </label>
 
-      <label>
+      <label className="select-inline">
         Order:
         <select
           value={order}
           onChange={(e) => onOrder(e.target.value as Order)}
-          style={{ marginLeft: 8 }}
         >
           <option value="asc">Ascending</option>
           <option value="desc">Descending</option>
