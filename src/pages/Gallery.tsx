@@ -26,12 +26,10 @@ export default function GalleryPage() {
         setError(null);
 
         if (selected.length === 0) {
-          // 默认：展示前 60 个
           setItems(await getPokemonList(60, 0));
           return;
         }
 
-        // 拉取每个类型的列表
         const lists = await Promise.all(selected.map((t) => getPokemonByType(t, 300)));
 
         if (selected.length === 1) {
@@ -39,26 +37,22 @@ export default function GalleryPage() {
           return;
         }
 
-        // —— 这里改为【交集 AND】逻辑 ——
-        // 1) 转成 id 的集合
+
         const idSets = lists.map((lst) => new Set(lst.map((p) => p.id)));
 
-        // 2) 计算交集（出现在每个集合中的 id）
         let intersect = idSets[0];
         for (let i = 1; i < idSets.length; i++) {
           intersect = new Set([...intersect].filter((id) => idSets[i].has(id)));
         }
 
-        // 3) 用第一个出现的条目作为详情来源，映射交集 id → item
         const baseMap = new Map<number, PokemonListItem>();
         lists.forEach((lst) => lst.forEach((p) => { if (!baseMap.has(p.id)) baseMap.set(p.id, p); }));
 
         const result = [...intersect]
-          .map((id) => baseMap.get(id)!)
-          .filter(Boolean)
-          .slice(0, 120) // 可按需限制数量
-          // 可选排序，让展示稳定些
-          .sort((a, b) => a.id - b.id);
+        .map((id) => baseMap.get(id))
+        .filter((p): p is PokemonListItem => Boolean(p))
+        .sort((a, b) => a.id - b.id)
+        .slice(0, 300);
 
         setItems(result);
       } catch (e) {
